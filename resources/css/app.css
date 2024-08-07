@@ -4,3 +4,12 @@
 
 html { scroll-behavior: smooth;}
 
+.custom-table {
+    border-collapse: collapse;
+    width: 95%;
+}
+.custom-table th,
+.custom-table td {
+    border: 1px solid #d1d5db; /* 薄いグレーのボーダー */
+    padding:0.5rem 0.1rem;
+}

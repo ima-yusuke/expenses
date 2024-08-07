@@ -9,7 +9,7 @@ class MainController extends Controller
 {
 
     public function ShowIndex(){
-        $products = Product::all();
+        $products = Product::orderBy('date', 'asc')->get();
         return view("index",compact("products"));
     }
 

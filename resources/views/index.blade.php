@@ -28,15 +28,15 @@
         </div>
 
         <div class="w-full flex justify-center">
-            <table class="w-[95%]">
+            <table class="w-[95%] custom-table">
                 <thead>
                     <tr>
-                        <th>商品名</th>
-                        <th>価格</th>
-                        <th>数量</th>
-                        <th>合計</th>
-                        <th>購入日</th>
-                        <th>削除</th>
+                        <th class="text-lg">商品名</th>
+                        <th class="text-lg">価格</th>
+                        <th class="text-lg">数量</th>
+                        <th class="text-lg">合計</th>
+                        <th class="text-lg">購入日</th>
+                        <th class="text-lg">削除</th>
                     </tr>
                 </thead>
                 <tbody>
