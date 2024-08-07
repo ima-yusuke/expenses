@@ -1,0 +1,59 @@
+/*サイドバー*/
+.side_menu_off{
+    background: rgba(0, 0, 0, .7);
+    width: 90%;
+    height: 100%;
+    position: fixed;
+    right: -90%;
+    top: 0;
+    transition-duration: 0.6s;
+    z-index: 30;
+}@media screen and (min-width:600px){
+    .side_menu_off {
+        background: rgba(0, 0, 0, .7);
+        width: 50%;
+        height: 100%;
+        position: fixed;
+        right: -50%;
+        top: 0;
+        transition-duration: 0.6s;
+        z-index: 30;
+    }
+}
+
+.side_menu_show{
+    background: rgba(0, 0, 0, .7);
+    width: 90%;
+    height: 100%;
+    position: fixed;
+    right: 0;
+    top: 0;
+    transition-duration: 0.6s;
+    z-index: 30;
+}@media screen and (min-width:600px){
+    .side_menu_show {
+        background: rgba(0, 0, 0, .7);
+        width: 50%;
+        height: 100%;
+        position: fixed;
+        right: 0;
+        top: 0;
+        transition-duration: 0.6s;
+        z-index: 30;
+    }
+}
+
+#hamburger_icon{
+    z-index: 1000;
+}
+
+#close_icon{
+    position: fixed;
+    z-index: 1000;
+    color: white;
+}
+
+/*サイドバー開いてるときにスクロールしないようにする*/
+.scroll_none{
+    overflow: hidden;
+}
