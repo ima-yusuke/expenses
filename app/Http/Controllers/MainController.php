@@ -10,7 +10,9 @@ class MainController extends Controller
 
     public function ShowIndex(){
         $products = Product::orderBy('date', 'asc')->get();
-        return view("index",compact("products"));
+        $total = Product::selectRaw('SUM(price * quantity) as total')->value('total');
+        $currentMonth = (new \DateTime())->format('n');
+        return view("index",compact("products","total" , "currentMonth"));
     }
 
     public function AddProduct(Request $request){
@@ -22,6 +24,14 @@ class MainController extends Controller
         $product->date = $request->date;
         $product->save();
 
+        return redirect()->back();
+    }
+
+    public function CheckProduct($id)
+    {
+        $product = Product::findOrFail($id); // 商品が見つからない場合は404エラー
+        $product->flag = !$product->flag;
+        $product->save();
         return redirect()->back();
     }
 

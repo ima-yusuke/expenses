@@ -7,7 +7,7 @@ use App\Http\Controllers\MainController;
 
 Route::get('/', [MainController::class, 'ShowIndex'])->name('ShowIndex');
 Route::post('/', [MainController::class, 'AddProduct'])->name('AddProduct');
-Route::delete('/{id}', [MainController::class, 'DeleteProduct'])->name('DeleteProduct');
+Route::post('/update/{id}', [MainController::class, 'CheckProduct'])->name('CheckProduct');
 
 
 Route::get('/dashboard', function () {
