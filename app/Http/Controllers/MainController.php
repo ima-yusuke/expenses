@@ -4,15 +4,37 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Word;
+use App\Models\Japanese;
 
 class MainController extends Controller
 {
 
     public function ShowIndex(){
-        $products = Product::orderBy('date', 'asc')->get();
-        $total = Product::selectRaw('SUM(price * quantity) as total')->value('total');
-        $currentMonth = (new \DateTime())->format('n');
-        return view("index",compact("products","total" , "currentMonth"));
+        $words = Word::with('japanese')->get();
+        return view("index",compact('words'));
+    }
+
+    public function AddWord(Request $request){
+
+        // フォームから送信された意味を配列として取得
+        $meanings = $request->input('meaningArray');
+
+        // データベースにデータを保存する
+        $word = new Word();
+        $word->word = $request->word;
+        $word->en_example = $request->en_example;
+        $word->jp_example = $request->jp_example;
+        $word->save();
+
+        for ($i = 0; $i < count($meanings); $i++) {
+            $japanese = new Japanese();
+            $japanese->word_id = $word->id;
+            $japanese->japanese = $meanings[$i];
+            $japanese->save();
+        }
+
+        return redirect()->back();
     }
 
     public function AddProduct(Request $request){

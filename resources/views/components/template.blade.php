@@ -6,15 +6,8 @@
     @endif
     @vite(['resources/css/app.css','resources/css/side-menu.css','resources/js/side-menu.js','resources/js/app.js'])
 </x-head>
-<div>
-    @if($title!="家計簿")
-        <x-header></x-header>
-    @endif
-
-    <body id="body">
-        <x-side-menu></x-side-menu>
-        {{ $slot }}
-    </body>
-</div>
-
+<body id="body">
+    <x-side-menu></x-side-menu>
+    {{ $slot }}
+</body>
 </html>

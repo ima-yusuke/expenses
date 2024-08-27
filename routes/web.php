@@ -6,9 +6,9 @@ use App\Http\Controllers\MainController;
 
 
 Route::get('/', [MainController::class, 'ShowIndex'])->name('ShowIndex');
-Route::post('/', [MainController::class, 'AddProduct'])->name('AddProduct');
+//Route::post('/', [MainController::class, 'AddProduct'])->name('AddProduct');
 Route::post('/update/{id}', [MainController::class, 'CheckProduct'])->name('CheckProduct');
-
+Route::post('/', [MainController::class, 'AddWord'])->name('AddWord');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
