@@ -27,12 +27,14 @@ class MainController extends Controller
         $word->jp_example = $request->jp_example;
         $word->save();
 
+        // Japaneseの保存
         for ($i = 0; $i < count($meanings); $i++) {
             $japanese = new Japanese();
             $japanese->word_id = $word->id;
             $japanese->japanese = $meanings[$i];
             $japanese->save();
         }
+
 
         return redirect()->back();
     }
