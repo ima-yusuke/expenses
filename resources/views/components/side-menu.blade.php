@@ -6,21 +6,23 @@
 
         <div class="py-4 overflow-y-auto">
             <ul class="space-y-4">
-                <li class="side_li">
-                    <a href="#profile" class="flex items-center p-2 text-white text-4xl hover:text-gray-100 group">
-                        <span class="ms-3">Profile</span>
-                    </a>
-                </li>
-                <li class="side_li">
-                    <a href="#itinerary" class="flex items-center p-2 text-white text-4xl hover:text-gray-100 group">
-                        <span class="ms-3">Itinerary</span>
-                    </a>
-                </li>
-                <li class="side_li">
-                    <a href="#album" class="flex items-center p-2 text-white text-4xl hover:text-gray-100 group">
-                        <span class="ms-3">Album</span>
-                    </a>
-                </li>
+                @cannot('deleteWord')
+                    <li class="side_li">
+                        <a href="/login" class="flex items-center p-2 text-white text-4xl hover:text-gray-100 group">
+                            <span class="ms-3">LOGIN</span>
+                        </a>
+                    </li>
+                @endcannot
+                @hasanyrole('membership')
+                    <li class="side_li">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                        <button type="submit" class="flex items-center p-2 text-white text-4xl hover:text-gray-100 group">
+                            <span class="ms-3">LOGOUT</span>
+                        </button>
+                        </form>
+                    </li>
+                @endhasanyrole
             </ul>
         </div>
     </div>

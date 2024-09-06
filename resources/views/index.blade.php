@@ -1,7 +1,8 @@
 <x-template title="単語帳">
-    <section>
-        {{--新規登録--}}
-        <div class="w-full flex justify-center">
+    <section class="py-16">
+        {{--新規登録(権限のあるユーザーでログインした場合のみ）--}}
+        @hasanyrole('membership')
+            <div class="w-full flex justify-center">
             <form method="post" action="{{route('AddWord')}}" class="flex flex-col items-center gap-4 w-[90%]">
                 @csrf
                 <div class="flex flex-col gap-1 w-full">
@@ -30,6 +31,7 @@
                 <button type="submit" class="border border-solid border-black px-4 py-2 rounded-lg shadow-xl w-[150px]">登録</button>
             </form>
         </div>
+        @endhasanyrole
 
         {{--単語一覧--}}
         <div class="w-full flex flex-col justify-center items-center gap-4">
@@ -46,12 +48,14 @@
                         <p>{{$word["en_example"]}}</p>
                         <p>{{$word["jp_example"]}}</p>
                     </aside>
-                    <form method="post" action="{{route('DeleteWord')}}" >
-                        @csrf
-                        @method('DELETE')
-                        <input type="hidden" name="id" value="{{$word["id"]}}">
-                        <button type="submit" class="text-white bg-red-500 h-[25px] w-[25px] rounded-full absolute right-0 -top-2">✗</button>
-                    </form>
+                    @hasanyrole('membership')
+                        <form method="post" action="{{route('DeleteWord')}}" >
+                            @csrf
+                            @method('DELETE')
+                            <input type="hidden" name="id" value="{{$word["id"]}}">
+                            <button type="submit" class="text-white bg-red-500 h-[25px] w-[25px] rounded-full absolute right-0 -top-2">✗</button>
+                        </form>
+                    @endhasanyrole
                 </div>
             @endforeach
 

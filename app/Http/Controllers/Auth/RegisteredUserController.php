@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class RegisteredUserController extends Controller
 {
@@ -40,6 +42,20 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        // 'membership' ロールが存在するか確認、存在しない場合は作成
+        $membershipRole = Role::firstOrCreate(['name' => 'membership']);
+
+        // 'deleteWord' 権限が存在するか確認、存在しない場合は作成
+        $deletePermission = Permission::firstOrCreate(['name' => 'deleteWord']);
+
+        // 'membership' ロールに 'read' 権限を付与
+        if (!$membershipRole->hasPermissionTo($deletePermission)) {
+            $membershipRole->givePermissionTo($deletePermission);
+        }
+
+        // ユーザーに 'membership' ロールを割り当て
+        $user->assignRole($membershipRole);
 
         event(new Registered($user));
 
