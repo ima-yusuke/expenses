@@ -39,6 +39,14 @@ class MainController extends Controller
         return redirect()->back();
     }
 
+    public function DeleteWord(Request $request)
+    {
+        $id = $request->id;
+        $word = Word::findOrFail($id); // 単語が見つからない場合は404エラー
+        $word->delete();
+        return redirect()->back();
+    }
+
     public function AddProduct(Request $request){
         // データベースにデータを保存する
         $product = new Product();

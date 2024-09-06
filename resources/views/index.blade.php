@@ -34,7 +34,7 @@
         {{--単語一覧--}}
         <div class="w-full flex flex-col justify-center items-center gap-4">
             @foreach($words as $word)
-                <div class="flex flex-col items-start justify-center rounded-lg p-4 w-[90%] shadow-xl border border-solid border-gray-100">
+                <div class="relative flex flex-col items-start justify-center rounded-lg p-4 w-[90%] shadow-xl border border-solid border-gray-100">
                     <h1 class="text-xl font-bold pb-2">{{$word["word"]}}</h1>
                     <p class="border-b-2 border-solid border-b-blue-200 w-full"></p>
                     <aside class="flex flex-col items-start pt-2">
@@ -46,6 +46,12 @@
                         <p>{{$word["en_example"]}}</p>
                         <p>{{$word["jp_example"]}}</p>
                     </aside>
+                    <form method="post" action="{{route('DeleteWord')}}" >
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" name="id" value="{{$word["id"]}}">
+                        <button type="submit" class="text-white bg-red-500 h-[25px] w-[25px] rounded-full absolute right-0 -top-2">✗</button>
+                    </form>
                 </div>
             @endforeach
 
