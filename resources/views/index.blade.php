@@ -49,7 +49,7 @@
                         <p>{{$word["jp_example"]}}</p>
                     </aside>
                     @hasanyrole('membership')
-                        <form method="post" action="{{route('DeleteWord')}}" >
+                        <form method="post" action="{{route('DeleteWord')}}" onsubmit="return confirmDelete()">
                             @csrf
                             @method('DELETE')
                             <input type="hidden" name="id" value="{{$word["id"]}}">
@@ -78,5 +78,9 @@
         form.insertBefore(div, ADD_MEANING_BTN);
         count++;
     });
+
+    function confirmDelete() {
+        return confirm('本当に削除しますか？');
+    }
 </script>
 </x-template>
