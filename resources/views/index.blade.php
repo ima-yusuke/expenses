@@ -3,7 +3,7 @@
         {{--新規登録(権限のあるユーザーでログインした場合のみ）--}}
         @hasanyrole('membership')
             <div class="w-full flex justify-center">
-            <form method="post" action="{{route('AddWord')}}" class="flex flex-col items-center gap-4 w-[90%]">
+            <form method="post" action="{{route('AddWord')}}" class="flex flex-col items-center gap-4 w-[90%]" id="add_form">
                 @csrf
                 <div class="flex flex-col gap-1 w-full">
                     <label for="word" class="block text-gray-700 text-xl">【英単語】</label>
@@ -63,7 +63,7 @@
     </section>
 <script>
     const ADD_MEANING_BTN = document.getElementById('add_meaning');
-    const form = document.querySelector('form');
+    const form = document.getElementById('add_form');
     let count = 2;
 
     ADD_MEANING_BTN.addEventListener('click', () => {
