@@ -35,6 +35,7 @@
 
         {{--単語一覧--}}
         <div class="w-full flex flex-col justify-center items-center gap-4">
+            <h1>単語数：{{count($words)}}</h1>
             @foreach($words as $word)
                 <div class="relative flex flex-col items-start justify-center rounded-lg p-4 w-[90%] shadow-xl border border-solid border-gray-100">
                     <h1 class="text-xl font-bold pb-2">{{$word["word"]}}</h1>
