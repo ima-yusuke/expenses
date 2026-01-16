@@ -1,67 +1,145 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 英語学習単語帳アプリ
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+AI搭載の英語学習支援Webアプリケーション。単語の登録・管理、検索、テスト機能に加えて、Google Gemini AIを活用した返信アシスタント機能を備えています。
 
-## About Laravel
+## 主な機能
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### 📚 単語帳管理
+- **単語の登録**: 英単語、日本語の意味（複数可）、例文を登録
+- **単語一覧**: 登録した全ての単語を一覧表示
+- **検索機能**: 英単語または日本語の意味から検索
+- **削除機能**: 不要な単語を削除（権限が必要）
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### ✏️ 単語テスト
+- ランダムに出題される4択クイズ
+- 正解・不正解の判定と解説表示
+- 例文を確認しながら学習可能
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 🤖 AI返信アシスタント（Google Gemini API使用）
+- 友達からの英語メッセージに対する返信文を自動生成
+- 単語帳の単語を自然に使った返信文を提案
+- カジュアルで自然な会話表現を優先
+- 英文と日本語訳、使用された単語を表示
+- ワンクリックで英文をコピー
 
-## Learning Laravel
+### 🔐 権限管理
+- Laravel Permissionを使用した権限管理
+- 「membership」権限を持つユーザーのみ単語の追加・削除が可能
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 技術スタック
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **バックエンド**: Laravel 11
+- **フロントエンド**: Blade Templates, Tailwind CSS
+- **データベース**: SQLite
+- **認証**: Laravel Breeze
+- **権限管理**: Spatie Laravel Permission
+- **AI**: Google Gemini API (gemini-3-flash-preview)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## セットアップ
 
-## Laravel Sponsors
+### 必要な環境
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- PHP 8.2以上
+- Composer
+- Node.js & NPM
 
-### Premium Partners
+### インストール手順
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+1. **リポジトリをクローン**
+```bash
+git clone <repository-url>
+cd expenses
+```
 
-## Contributing
+2. **依存関係をインストール**
+```bash
+composer install
+npm install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. **環境変数を設定**
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-## Code of Conduct
+4. **Gemini APIキーを設定**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+`.env`ファイルに以下を追加：
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+```
 
-## Security Vulnerabilities
+APIキーの取得方法：
+1. [Google AI Studio](https://makersuite.google.com/app/apikey)にアクセス
+2. 無料のAPIキーを作成
+3. `.env`ファイルに貼り付け
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+5. **データベースを設定**
+```bash
+php artisan migrate
+```
 
-## License
+6. **権限を設定**
+```bash
+php artisan db:seed --class=RolesAndPermissionsSeeder
+```
+※ Seederファイルを作成して、membershipロールと権限を設定してください
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# expenses
+7. **アセットをビルド**
+```bash
+npm run dev
+```
+
+8. **サーバーを起動**
+```bash
+php artisan serve
+```
+
+アプリケーションが `http://localhost:8000` で起動します。
+
+## 使い方
+
+### 単語の登録
+1. 「membership」権限でログイン
+2. トップページの「新しい単語を追加」フォームから登録
+3. 英単語、意味、例文を入力
+4. 「意味を追加」ボタンで複数の意味を登録可能
+
+### 単語の検索
+- 検索ボックスに英単語または日本語の意味を入力
+- 部分一致で検索可能
+
+### 単語テスト
+1. 「単語テスト」ボタンをクリック
+2. 表示された英単語の意味を4つの選択肢から選択
+3. 結果と解説を確認
+4. 「次の問題へ」で続けてテスト
+
+### AI返信アシスタント
+1. 「返信アシスタント」ボタンをクリック
+2. 友達からの英語メッセージを入力
+3. 返信したい内容を日本語で入力
+4. 「返信文を生成」をクリック（10-30秒待機）
+5. 生成された英文を確認し、コピーして使用
+
+## デザイン
+
+- **シンプル＆ミニマル**: グレー系を基調とした落ち着いたデザイン
+- **レスポンシブ対応**: スマホ・タブレット・PCで最適な表示
+- **見やすさ重視**: 読みやすいタイポグラフィと適切な余白
+
+## ブランチ構成
+
+- `main`: 本番用ブランチ
+- `feature/reply-assistant`: 返信アシスタント機能の開発ブランチ
+
+## ライセンス
+
+MIT License
+
+## 注意事項
+
+- Gemini APIは無料枠内で使用できますが、大量のリクエストは制限される場合があります
+- 返信アシスタント機能は1回の生成に10-30秒程度かかります
+- APIキーは絶対に公開リポジトリにコミットしないでください
