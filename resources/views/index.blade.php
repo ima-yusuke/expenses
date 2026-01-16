@@ -62,9 +62,14 @@
                 <div class="mb-8">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-xl font-semibold text-gray-900">単語一覧</h2>
-                        <a href="{{route('ShowTest')}}" class="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded font-medium transition-colors">
-                            単語テスト
-                        </a>
+                        <div class="flex gap-2">
+                            <a href="{{route('ShowReplyAssistant')}}" class="bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 px-4 py-2 rounded font-medium transition-colors">
+                                返信アシスタント
+                            </a>
+                            <a href="{{route('ShowTest')}}" class="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded font-medium transition-colors">
+                                単語テスト
+                            </a>
+                        </div>
                     </div>
 
                     <form method="get" action="{{route('ShowIndex')}}" class="mb-6">

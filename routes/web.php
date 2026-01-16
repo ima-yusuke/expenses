@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\ReplyController;
 
 
 Route::get('/', [MainController::class, 'ShowIndex'])->name('ShowIndex');
@@ -15,6 +16,9 @@ Route::delete('/', [MainController::class, 'DeleteWord'])->name('DeleteWord');
 
 Route::get('/test', [TestController::class, 'ShowTest'])->name('ShowTest');
 Route::post('/test/check', [TestController::class, 'CheckAnswer'])->name('CheckAnswer');
+
+Route::get('/reply-assistant', [ReplyController::class, 'ShowReplyAssistant'])->name('ShowReplyAssistant');
+Route::post('/reply-assistant/generate', [ReplyController::class, 'GenerateReply'])->name('GenerateReply');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
