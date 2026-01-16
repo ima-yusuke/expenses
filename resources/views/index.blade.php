@@ -60,30 +60,34 @@
             {{--単語一覧--}}
             <div class="max-w-3xl mx-auto">
                 <div class="mb-8">
-                    <div class="flex justify-between items-center mb-6">
+                    <!-- タイトルとボタン -->
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
                         <h2 class="text-xl font-semibold text-gray-900">単語一覧</h2>
-                        <div class="flex gap-2">
-                            <a href="{{route('ShowReplyAssistant')}}" class="bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 px-4 py-2 rounded font-medium transition-colors">
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <a href="{{route('ShowReplyAssistant')}}" class="text-center bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 px-4 py-2 rounded font-medium transition-colors text-sm sm:text-base whitespace-nowrap">
                                 返信アシスタント
                             </a>
-                            <a href="{{route('ShowTest')}}" class="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded font-medium transition-colors">
+                            <a href="{{route('ShowTest')}}" class="text-center bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded font-medium transition-colors text-sm sm:text-base whitespace-nowrap">
                                 単語テスト
                             </a>
                         </div>
                     </div>
 
+                    <!-- 検索フォーム -->
                     <form method="get" action="{{route('ShowIndex')}}" class="mb-6">
-                        <div class="flex gap-2">
+                        <div class="flex flex-col sm:flex-row gap-2">
                             <input type="text" name="search" value="{{request('search')}}" placeholder="単語または意味を検索..."
-                                class="flex-1 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900">
-                            <button type="submit" class="bg-gray-900 hover:bg-gray-800 text-white px-6 py-2 rounded font-medium transition-colors">
-                                検索
-                            </button>
-                            @if(request('search'))
-                                <a href="{{route('ShowIndex')}}" class="border border-gray-300 hover:border-gray-400 text-gray-700 px-4 py-2 rounded font-medium transition-colors">
-                                    クリア
-                                </a>
-                            @endif
+                                class="flex-1 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 text-sm sm:text-base">
+                            <div class="flex gap-2">
+                                <button type="submit" class="flex-1 sm:flex-none bg-gray-900 hover:bg-gray-800 text-white px-6 py-2 rounded font-medium transition-colors text-sm sm:text-base whitespace-nowrap">
+                                    検索
+                                </button>
+                                @if(request('search'))
+                                    <a href="{{route('ShowIndex')}}" class="flex-1 sm:flex-none text-center border border-gray-300 hover:border-gray-400 text-gray-700 px-4 py-2 rounded font-medium transition-colors text-sm sm:text-base whitespace-nowrap">
+                                        クリア
+                                    </a>
+                                @endif
+                            </div>
                         </div>
                     </form>
                     <p class="text-sm text-gray-600">
