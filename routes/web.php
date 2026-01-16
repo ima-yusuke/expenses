@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\TestController;
 
 
 Route::get('/', [MainController::class, 'ShowIndex'])->name('ShowIndex');
@@ -11,6 +12,9 @@ Route::post('/update/{id}', [MainController::class, 'CheckProduct'])->name('Chec
 
 Route::post('/', [MainController::class, 'AddWord'])->name('AddWord');
 Route::delete('/', [MainController::class, 'DeleteWord'])->name('DeleteWord');
+
+Route::get('/test', [TestController::class, 'ShowTest'])->name('ShowTest');
+Route::post('/test/check', [TestController::class, 'CheckAnswer'])->name('CheckAnswer');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

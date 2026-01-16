@@ -60,6 +60,13 @@
             {{--単語一覧--}}
             <div class="max-w-3xl mx-auto">
                 <div class="mb-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-semibold text-gray-900">単語一覧</h2>
+                        <a href="{{route('ShowTest')}}" class="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded font-medium transition-colors">
+                            単語テスト
+                        </a>
+                    </div>
+
                     <form method="get" action="{{route('ShowIndex')}}" class="mb-6">
                         <div class="flex gap-2">
                             <input type="text" name="search" value="{{request('search')}}" placeholder="単語または意味を検索..."
