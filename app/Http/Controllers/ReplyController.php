@@ -83,6 +83,14 @@ class ReplyController extends Controller
                 $result = $response->json();
                 $generatedText = $result['candidates'][0]['content']['parts'][0]['text'] ?? '';
 
+                // 英語返信部分を抽出
+                $englishReply = '';
+                if (preg_match('/【英語返信】\s*\n(.+?)(\n|$)/s', $generatedText, $matches)) {
+                    $englishReply = trim($matches[1]);
+                } else if (preg_match('/英語返信[:\s]*\n(.+?)(\n|$)/s', $generatedText, $matches)) {
+                    $englishReply = trim($matches[1]);
+                }
+
                 // 使用した単語を抽出
                 $usedWords = [];
                 foreach ($words as $word) {
@@ -91,7 +99,7 @@ class ReplyController extends Controller
                     }
                 }
 
-                return view('reply-result', compact('friendMessage', 'replyIntent', 'generatedText', 'usedWords'));
+                return view('reply-result', compact('friendMessage', 'replyIntent', 'generatedText', 'englishReply', 'usedWords'));
             } else {
                 return back()->with('error', 'APIリクエストに失敗しました: ' . $response->body());
             }

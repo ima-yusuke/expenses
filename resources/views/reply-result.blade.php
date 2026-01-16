@@ -23,9 +23,25 @@
 
                     <!-- AI生成の返信文 -->
                     <div class="bg-white border border-gray-200 rounded-lg p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">提案された返信文</h3>
-                        <div class="prose max-w-none">
-                            <div class="whitespace-pre-wrap text-gray-900">{{$generatedText}}</div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-900">提案された返信文</h3>
+                            <button onclick="copyEnglishOnly()" class="bg-gray-900 hover:bg-gray-800 text-white text-sm px-4 py-2 rounded font-medium transition-colors">
+                                英文をコピー
+                            </button>
+                        </div>
+
+                        <!-- 英文のみ -->
+                        <div class="bg-gray-50 border border-gray-200 rounded p-4 mb-4">
+                            <p class="text-sm text-gray-600 mb-2">英語返信:</p>
+                            <p id="english-reply" class="text-lg text-gray-900">{{$englishReply ?? ''}}</p>
+                        </div>
+
+                        <!-- 日本語訳と解説 -->
+                        <div class="border-t border-gray-200 pt-4">
+                            <p class="text-sm text-gray-600 mb-2">解説:</p>
+                            <div class="prose max-w-none">
+                                <div class="whitespace-pre-wrap text-gray-900">{{$generatedText}}</div>
+                            </div>
                         </div>
                     </div>
 
@@ -56,23 +72,16 @@
                         </a>
                     </div>
 
-                    <!-- コピー機能 -->
-                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                        <p class="text-sm text-gray-600 mb-3">返信文をコピーして使いましょう！</p>
-                        <button onclick="copyReply()" class="w-full bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 px-4 py-2 rounded font-medium transition-colors">
-                            返信文をコピー
-                        </button>
-                    </div>
                 </div>
             </div>
         </section>
     </div>
 
     <script>
-        function copyReply() {
-            const text = `{{$generatedText}}`;
+        function copyEnglishOnly() {
+            const text = document.getElementById('english-reply').textContent;
             navigator.clipboard.writeText(text).then(() => {
-                alert('返信文をコピーしました！');
+                alert('英文をコピーしました！');
             }).catch(err => {
                 console.error('コピーに失敗しました:', err);
             });
