@@ -24,7 +24,7 @@
                         </div>
                     @endif
 
-                    <form method="post" action="{{route('CheckAnswer')}}" class="space-y-3">
+                    <form method="post" action="{{route('CheckAnswer')}}" class="space-y-3 flex flex-col gap-4">
                         @csrf
                         <input type="hidden" name="correct_answer" value="{{$correctMeaning}}">
                         <input type="hidden" name="word_id" value="{{$correctWord->id}}">
