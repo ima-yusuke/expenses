@@ -10,9 +10,28 @@ use App\Models\Japanese;
 class MainController extends Controller
 {
 
-    public function ShowIndex(){
-        $words = Word::with('japanese')->get();
-        return view("index",compact('words'));
+    public function ShowIndex(Request $request){
+        $search = $request->input('search');
+
+        if ($search) {
+            // 英単語または日本語の意味で検索
+            $words = Word::with('japanese')
+                ->where('word', 'like', '%' . $search . '%')
+                ->orWhere('en_example', 'like', '%' . $search . '%')
+                ->orWhere('jp_example', 'like', '%' . $search . '%')
+                ->orWhereHas('japanese', function($query) use ($search) {
+                    $query->where('japanese', 'like', '%' . $search . '%');
+                })
+                ->get();
+
+            // 総単語数を取得
+            $totalCount = Word::count();
+        } else {
+            $words = Word::with('japanese')->get();
+            $totalCount = $words->count();
+        }
+
+        return view("index", compact('words', 'totalCount'));
     }
 
     public function AddWord(Request $request){
