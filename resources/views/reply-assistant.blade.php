@@ -22,7 +22,7 @@
                         </div>
                     @endif
 
-                    <form method="post" action="{{route('GenerateReply')}}" class="space-y-6">
+                    <form method="post" action="{{route('GenerateReply')}}" class="space-y-6" id="replyForm" onsubmit="showLoading()">
                         @csrf
 
                         <div>
@@ -45,10 +45,19 @@
                                 rows="4"></textarea>
                         </div>
 
-                        <button type="submit"
+                        <button type="submit" id="submitBtn"
                             class="w-full bg-gray-900 hover:bg-gray-800 text-white px-4 py-3 rounded font-medium transition-colors">
                             返信文を生成
                         </button>
+
+                        <!-- ローディング表示 -->
+                        <div id="loadingIndicator" class="hidden">
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+                                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mb-3"></div>
+                                <p class="text-gray-900 font-medium mb-1">返信文を生成中...</p>
+                                <p class="text-sm text-gray-600">少々お待ちください（10-30秒程度）</p>
+                            </div>
+                        </div>
                     </form>
 
                     <div class="mt-8 pt-8 border-t border-gray-200">
@@ -63,4 +72,18 @@
             </div>
         </section>
     </div>
+
+    <script>
+        function showLoading() {
+            // ボタンを無効化
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('submitBtn').classList.add('opacity-50', 'cursor-not-allowed');
+
+            // ローディング表示
+            document.getElementById('loadingIndicator').classList.remove('hidden');
+
+            // フォーム送信を続行
+            return true;
+        }
+    </script>
 </x-template>
