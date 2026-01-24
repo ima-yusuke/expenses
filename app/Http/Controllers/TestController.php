@@ -46,6 +46,7 @@ class TestController extends Controller
         $apiKey = config('services.gemini.api_key');
 
         if (!$apiKey) {
+            \Log::error('Gemini API key not found for test generation');
             return [];
         }
 
@@ -66,6 +67,8 @@ class TestController extends Controller
 3. (不正解の選択肢3)";
 
         try {
+            \Log::info('Calling Gemini API for test generation', ['word' => $englishWord]);
+
             $response = Http::timeout(15)->post(
                 "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={$apiKey}",
                 [
@@ -79,9 +82,13 @@ class TestController extends Controller
                 ]
             );
 
+            \Log::info('Gemini API response status', ['status' => $response->status()]);
+
             if ($response->successful()) {
                 $result = $response->json();
                 $generatedText = $result['candidates'][0]['content']['parts'][0]['text'] ?? '';
+
+                \Log::info('Generated text from API', ['text' => $generatedText]);
 
                 // 選択肢を抽出
                 $wrongOptions = [];
@@ -89,13 +96,19 @@ class TestController extends Controller
                     $wrongOptions = array_slice($matches[1], 0, 3);
                 }
 
+                \Log::info('Extracted wrong options', ['options' => $wrongOptions, 'count' => count($wrongOptions)]);
+
                 // 正解と不正解をシャッフル
                 if (count($wrongOptions) === 3) {
                     return collect([$correctMeaning])->merge($wrongOptions)->shuffle();
+                } else {
+                    \Log::warning('Not enough options generated', ['count' => count($wrongOptions)]);
                 }
+            } else {
+                \Log::error('Gemini API request failed', ['status' => $response->status(), 'body' => $response->body()]);
             }
         } catch (\Exception $e) {
-            \Log::error('Gemini API error in test generation: ' . $e->getMessage());
+            \Log::error('Gemini API error in test generation: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
         }
 
         return [];
