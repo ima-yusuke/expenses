@@ -1,38 +1,61 @@
 <x-template title="単語テスト">
-    <div class="min-h-screen bg-gray-50">
-        <section class="py-12 px-4 sm:px-6 lg:px-8">
-            <div class="max-w-2xl mx-auto">
-                <div class="mb-8">
-                    <a href="{{route('ShowIndex')}}" class="text-sm text-gray-600 hover:text-gray-900">
-                        ← 単語帳に戻る
+    <div class="min-h-screen bg-gradient-to-br from-primary-50 via-white to-accent-50">
+        <section class="py-16 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl mx-auto">
+                <div class="mb-10">
+                    <a href="{{route('ShowIndex')}}" class="inline-flex items-center text-sm text-primary-600 hover:text-primary-900 font-medium transition-colors">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        単語帳に戻る
                     </a>
                 </div>
 
-                <div class="bg-white border border-gray-200 rounded-lg p-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 mb-2 text-center">
-                        この単語の意味は？
-                    </h2>
+                <div class="bg-white/80 backdrop-blur-sm border border-primary-100 rounded-2xl p-10 shadow-soft-lg">
+                    <div class="text-center mb-8">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-accent-400 to-accent-600 mb-6">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-xl font-semibold text-primary-700 mb-4">
+                            この単語の意味は？
+                        </h2>
+                    </div>
 
-                    <div class="my-8 text-center">
-                        <p class="text-4xl font-bold text-gray-900">{{$correctWord->word}}</p>
+                    <div class="my-12 text-center">
+                        <div class="inline-block">
+                            <p class="text-5xl font-bold text-primary-900 tracking-wide">{{$correctWord->word}}</p>
+                            <div class="h-1 bg-gradient-to-r from-transparent via-accent-500 to-transparent mt-4 rounded-full"></div>
+                        </div>
                     </div>
 
                     @if($correctWord->en_example)
-                        <div class="mb-8 bg-gray-50 rounded p-4">
-                            <p class="text-sm text-gray-600 mb-1">例文:</p>
-                            <p class="text-gray-700 italic">{{$correctWord->en_example}}</p>
+                        <div class="mb-10 bg-gradient-to-br from-primary-50 to-accent-50/30 rounded-xl p-6 border border-primary-100">
+                            <div class="flex items-center mb-3">
+                                <svg class="w-5 h-5 mr-2 text-accent-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+                                </svg>
+                                <span class="text-sm font-semibold text-primary-700">例文</span>
+                            </div>
+                            <p class="text-primary-800 italic leading-relaxed">{{$correctWord->en_example}}</p>
                         </div>
                     @endif
 
-                    <form method="post" action="{{route('CheckAnswer')}}" class="space-y-3 flex flex-col gap-4">
+                    <form method="post" action="{{route('CheckAnswer')}}" class="space-y-4">
                         @csrf
                         <input type="hidden" name="correct_answer" value="{{$correctMeaning}}">
                         <input type="hidden" name="word_id" value="{{$correctWord->id}}">
 
-                        @foreach($options as $option)
+                        @foreach($options as $index => $option)
                             <button type="submit" name="answer" value="{{$option}}"
-                                class="w-full text-left border border-gray-300 hover:border-gray-900 hover:bg-gray-50 rounded-lg p-4 transition-colors">
-                                <span class="text-gray-900">{{$option}}</span>
+                                class="group w-full text-left bg-white hover:bg-gradient-to-r hover:from-accent-50 hover:to-accent-100 border-2 border-primary-200 hover:border-accent-400 rounded-xl p-5 transition-all duration-300 shadow-soft hover:shadow-soft-lg transform hover:-translate-y-0.5">
+                                <div class="flex items-center">
+                                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-primary-100 group-hover:bg-accent-200 text-primary-700 group-hover:text-accent-800 font-semibold mr-4 transition-colors flex-shrink-0">
+                                        {{ chr(65 + $index) }}
+                                    </span>
+                                    <span class="text-primary-900 font-medium">{{$option}}</span>
+                                </div>
                             </button>
                         @endforeach
                     </form>

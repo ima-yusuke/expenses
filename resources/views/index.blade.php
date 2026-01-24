@@ -1,55 +1,65 @@
 <x-template title="単語帳">
-    <div class="min-h-screen bg-gray-50">
-        <section class="py-12 px-4 sm:px-6 lg:px-8">
+    <div class="min-h-screen bg-gradient-to-br from-primary-50 via-white to-accent-50">
+        <section class="py-16 px-4 sm:px-6 lg:px-8">
             {{--新規登録(権限のあるユーザーでログインした場合のみ）--}}
             @hasanyrole('membership')
-                <div class="max-w-3xl mx-auto mb-12">
-                    <div class="bg-white border border-gray-200 rounded-lg p-8">
-                        <h2 class="text-2xl font-semibold text-gray-900 mb-6">
-                            新しい単語を追加
-                        </h2>
+                <div class="max-w-4xl mx-auto mb-16">
+                    <div class="bg-white/80 backdrop-blur-sm border border-primary-100 rounded-2xl p-10 shadow-soft-lg">
+                        <div class="flex items-center mb-8">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-accent-400 to-accent-600 flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                </svg>
+                            </div>
+                            <h2 class="text-2xl font-bold text-primary-900">
+                                新しい単語を追加
+                            </h2>
+                        </div>
 
-                        <form method="post" action="{{route('AddWord')}}" class="space-y-5" id="add_form">
+                        <form method="post" action="{{route('AddWord')}}" class="space-y-6" id="add_form">
                             @csrf
                             <div>
-                                <label for="word" class="block text-sm font-medium text-gray-700 mb-1">
+                                <label for="word" class="block text-sm font-semibold text-primary-900 mb-2">
                                     英単語
                                 </label>
                                 <input type="text" id="word" name="word" placeholder="例: serendipity"
-                                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900">
+                                    class="w-full border-2 border-primary-200 rounded-xl px-5 py-3 focus:outline-none focus:border-accent-500 focus:ring-4 focus:ring-accent-100 transition-all duration-200 bg-white/50 backdrop-blur-sm text-primary-900 placeholder-primary-400">
                             </div>
 
                             <div>
-                                <label for="jp_word_1" class="block text-sm font-medium text-gray-700 mb-1">
+                                <label for="jp_word_1" class="block text-sm font-semibold text-primary-900 mb-2">
                                     意味 1
                                 </label>
                                 <input type="text" id="jp_word_1" name="meaningArray[]" placeholder="例: 偶然の幸運な発見"
-                                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900">
+                                    class="w-full border-2 border-primary-200 rounded-xl px-5 py-3 focus:outline-none focus:border-accent-500 focus:ring-4 focus:ring-accent-100 transition-all duration-200 bg-white/50 backdrop-blur-sm text-primary-900 placeholder-primary-400">
                             </div>
 
                             <button type="button" id="add_meaning"
-                                class="text-sm text-gray-700 hover:text-gray-900 font-medium">
-                                + 意味を追加
+                                class="inline-flex items-center text-sm text-accent-700 hover:text-accent-800 font-semibold transition-colors">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                </svg>
+                                意味を追加
                             </button>
 
                             <div>
-                                <label for="en_example" class="block text-sm font-medium text-gray-700 mb-1">
+                                <label for="en_example" class="block text-sm font-semibold text-primary-900 mb-2">
                                     例文（英語）
                                 </label>
                                 <textarea id="en_example" name="en_example" placeholder="例: It was pure serendipity that we met at the cafe."
-                                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 resize-none" rows="2"></textarea>
+                                    class="w-full border-2 border-primary-200 rounded-xl px-5 py-3 focus:outline-none focus:border-accent-500 focus:ring-4 focus:ring-accent-100 resize-none transition-all duration-200 bg-white/50 backdrop-blur-sm text-primary-900 placeholder-primary-400" rows="3"></textarea>
                             </div>
 
                             <div>
-                                <label for="jp_example" class="block text-sm font-medium text-gray-700 mb-1">
+                                <label for="jp_example" class="block text-sm font-semibold text-primary-900 mb-2">
                                     例文（日本語）
                                 </label>
                                 <textarea id="jp_example" name="jp_example" placeholder="例: カフェで会ったのは純粋な偶然だった。"
-                                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 resize-none" rows="2"></textarea>
+                                    class="w-full border-2 border-primary-200 rounded-xl px-5 py-3 focus:outline-none focus:border-accent-500 focus:ring-4 focus:ring-accent-100 resize-none transition-all duration-200 bg-white/50 backdrop-blur-sm text-primary-900 placeholder-primary-400" rows="3"></textarea>
                             </div>
 
                             <button type="submit"
-                                class="w-full bg-gray-900 hover:bg-gray-800 text-white px-4 py-2.5 rounded font-medium transition-colors">
+                                class="w-full bg-gradient-to-r from-primary-800 to-primary-900 hover:from-primary-900 hover:to-primary-800 text-white px-6 py-4 rounded-xl font-semibold shadow-soft hover:shadow-soft-lg transition-all duration-300 transform hover:-translate-y-0.5">
                                 登録する
                             </button>
                         </form>
@@ -58,16 +68,21 @@
             @endhasanyrole
 
             {{--単語一覧--}}
-            <div class="max-w-3xl mx-auto">
-                <div class="mb-8">
+            <div class="max-w-4xl mx-auto">
+                <div class="mb-10">
                     <!-- タイトルとボタン -->
-                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
-                        <h2 class="text-xl font-semibold text-gray-900">単語一覧</h2>
-                        <div class="flex flex-col sm:flex-row gap-2">
-                            <a href="{{route('ShowReplyAssistant')}}" class="text-center bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 px-4 py-2 rounded font-medium transition-colors text-sm sm:text-base whitespace-nowrap">
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-6 mb-8">
+                        <h2 class="text-2xl font-bold text-primary-900 flex items-center">
+                            <svg class="w-7 h-7 mr-3 text-accent-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                            </svg>
+                            単語一覧
+                        </h2>
+                        <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                            <a href="{{route('ShowReplyAssistant')}}" class="text-center bg-white hover:bg-primary-50 border-2 border-primary-200 text-primary-900 px-6 py-3 rounded-xl font-semibold shadow-soft hover:shadow-soft-lg transition-all duration-300 text-sm sm:text-base whitespace-nowrap">
                                 返信アシスタント
                             </a>
-                            <a href="{{route('ShowTest')}}" class="text-center bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded font-medium transition-colors text-sm sm:text-base whitespace-nowrap">
+                            <a href="{{route('ShowTest')}}" class="text-center bg-gradient-to-r from-primary-800 to-primary-900 hover:from-primary-900 hover:to-primary-800 text-white px-6 py-3 rounded-xl font-semibold shadow-soft hover:shadow-soft-lg transition-all duration-300 transform hover:-translate-y-0.5 text-sm sm:text-base whitespace-nowrap">
                                 単語テスト
                             </a>
                         </div>
@@ -75,35 +90,45 @@
 
                     <!-- 検索フォーム -->
                     <form method="get" action="{{route('ShowIndex')}}" class="mb-6">
-                        <div class="flex flex-col sm:flex-row gap-2">
-                            <input type="text" name="search" value="{{request('search')}}" placeholder="単語または意味を検索..."
-                                class="flex-1 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 text-sm sm:text-base">
-                            <div class="flex gap-2">
-                                <button type="submit" class="flex-1 sm:flex-none bg-gray-900 hover:bg-gray-800 text-white px-6 py-2 rounded font-medium transition-colors text-sm sm:text-base whitespace-nowrap">
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <div class="flex-1 relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </div>
+                                <input type="text" name="search" value="{{request('search')}}" placeholder="単語または意味を検索..."
+                                    class="w-full pl-11 pr-4 py-3 border-2 border-primary-200 rounded-xl focus:outline-none focus:border-accent-500 focus:ring-4 focus:ring-accent-100 transition-all duration-200 bg-white/50 backdrop-blur-sm text-primary-900 placeholder-primary-400 text-sm sm:text-base">
+                            </div>
+                            <div class="flex gap-3">
+                                <button type="submit" class="flex-1 sm:flex-none bg-gradient-to-r from-primary-800 to-primary-900 hover:from-primary-900 hover:to-primary-800 text-white px-8 py-3 rounded-xl font-semibold shadow-soft hover:shadow-soft-lg transition-all duration-300 text-sm sm:text-base whitespace-nowrap">
                                     検索
                                 </button>
                                 @if(request('search'))
-                                    <a href="{{route('ShowIndex')}}" class="flex-1 sm:flex-none text-center border border-gray-300 hover:border-gray-400 text-gray-700 px-4 py-2 rounded font-medium transition-colors text-sm sm:text-base whitespace-nowrap">
+                                    <a href="{{route('ShowIndex')}}" class="flex-1 sm:flex-none text-center bg-white hover:bg-primary-50 border-2 border-primary-200 text-primary-700 px-6 py-3 rounded-xl font-semibold shadow-soft hover:shadow-soft-lg transition-all duration-300 text-sm sm:text-base whitespace-nowrap">
                                         クリア
                                     </a>
                                 @endif
                             </div>
                         </div>
                     </form>
-                    <p class="text-sm text-gray-600">
+                    <div class="flex items-center text-sm text-primary-600">
+                        <svg class="w-4 h-4 mr-2 text-accent-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
                         @if(request('search'))
-                            検索結果: {{count($words)}}件 / 総単語数: {{$totalCount}}件
+                            検索結果: <span class="font-semibold text-primary-900 mx-1">{{count($words)}}</span>件 / 総単語数: <span class="font-semibold text-primary-900 mx-1">{{$totalCount}}</span>件
                         @else
-                            総単語数: {{count($words)}}件
+                            総単語数: <span class="font-semibold text-primary-900 mx-1">{{count($words)}}</span>件
                         @endif
-                    </p>
+                    </div>
                 </div>
 
-                <div class="space-y-4">
+                <div class="space-y-5">
                     @foreach($words as $word)
-                        <div class="bg-white border border-gray-200 rounded-lg p-6 hover:border-gray-300 transition-colors">
-                            <div class="flex items-start justify-between mb-3">
-                                <h2 class="text-xl font-semibold text-gray-900">
+                        <div class="bg-white/80 backdrop-blur-sm border border-primary-100 rounded-2xl p-8 hover:shadow-soft-lg hover:border-accent-200 transition-all duration-300 group">
+                            <div class="flex items-start justify-between mb-4">
+                                <h2 class="text-2xl font-bold text-primary-900 group-hover:text-accent-700 transition-colors">
                                     {{$word["word"]}}
                                 </h2>
                                 @hasanyrole('membership')
@@ -112,28 +137,39 @@
                                         @method('DELETE')
                                         <input type="hidden" name="id" value="{{$word["id"]}}">
                                         <button type="submit"
-                                            class="text-gray-400 hover:text-red-600 transition-colors">
+                                            class="text-primary-300 hover:text-red-600 transition-colors p-2 rounded-lg hover:bg-red-50">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                             </svg>
                                         </button>
                                     </form>
                                 @endhasanyrole
                             </div>
 
-                            <div class="border-t border-gray-100 pt-3 mb-4">
-                                @foreach($word->japanese as $ja_words)
-                                    <p class="text-gray-700 mb-1">・{{$ja_words["japanese"]}}</p>
-                                @endforeach
+                            <div class="border-t border-primary-100 pt-4 mb-5">
+                                <div class="space-y-2">
+                                    @foreach($word->japanese as $ja_words)
+                                        <div class="flex items-start">
+                                            <span class="inline-block w-1.5 h-1.5 rounded-full bg-accent-500 mt-2 mr-3 flex-shrink-0"></span>
+                                            <p class="text-primary-800 text-base">{{$ja_words["japanese"]}}</p>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
 
                             @if($word["en_example"] || $word["jp_example"])
-                                <div class="bg-gray-50 rounded p-4 space-y-2 text-sm">
+                                <div class="bg-gradient-to-br from-primary-50 to-accent-50/30 rounded-xl p-5 space-y-3 border border-primary-100">
+                                    <div class="flex items-center mb-2">
+                                        <svg class="w-4 h-4 mr-2 text-accent-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+                                        </svg>
+                                        <span class="text-xs font-semibold text-primary-700">例文</span>
+                                    </div>
                                     @if($word["en_example"])
-                                        <p class="text-gray-600 italic">{{$word["en_example"]}}</p>
+                                        <p class="text-primary-700 italic leading-relaxed">{{$word["en_example"]}}</p>
                                     @endif
                                     @if($word["jp_example"])
-                                        <p class="text-gray-600">{{$word["jp_example"]}}</p>
+                                        <p class="text-primary-600 leading-relaxed">{{$word["jp_example"]}}</p>
                                     @endif
                                 </div>
                             @endif
@@ -152,11 +188,11 @@
     ADD_MEANING_BTN.addEventListener('click', () => {
         const div = document.createElement('div');
         div.innerHTML = `
-            <label for="jp_word_${count}" class="block text-sm font-medium text-gray-700 mb-1">
+            <label for="jp_word_${count}" class="block text-sm font-semibold text-primary-900 mb-2">
                 意味 ${count}
             </label>
             <input type="text" id="jp_word_${count}" name="meaningArray[]" placeholder="意味を入力"
-                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900">
+                class="w-full border-2 border-primary-200 rounded-xl px-5 py-3 focus:outline-none focus:border-accent-500 focus:ring-4 focus:ring-accent-100 transition-all duration-200 bg-white/50 backdrop-blur-sm text-primary-900 placeholder-primary-400">
         `;
         form.insertBefore(div, ADD_MEANING_BTN);
         count++;

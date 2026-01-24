@@ -1,4 +1,4 @@
-# 英語学習単語帳アプリ
+# VocaBuddy（ボキャバディ）
 
 AI搭載の英語学習支援Webアプリケーション。単語の登録・管理、検索、テスト機能に加えて、Google Gemini AIを活用した返信アシスタント機能を備えています。
 
@@ -48,7 +48,7 @@ AI搭載の英語学習支援Webアプリケーション。単語の登録・管
 1. **リポジトリをクローン**
 ```bash
 git clone <repository-url>
-cd expenses
+cd vocabuddy
 ```
 
 2. **依存関係をインストール**

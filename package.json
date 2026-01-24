@@ -1,4 +1,7 @@
 {
+    "name": "vocabuddy",
+    "version": "1.0.0",
+    "description": "AI-powered English vocabulary learning application",
     "private": true,
     "type": "module",
     "scripts": {

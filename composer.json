@@ -1,8 +1,8 @@
 {
-    "name": "laravel/laravel",
+    "name": "vocabuddy/vocabuddy",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "AI-powered English vocabulary learning application with smart reply assistant.",
+    "keywords": ["laravel", "vocabulary", "english-learning", "ai", "gemini"],
     "license": "MIT",
     "require": {
         "php": "^8.2",
