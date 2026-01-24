@@ -104,11 +104,24 @@ class ReplyController extends Controller
                     $englishReply = trim($matches[1]);
                 }
 
-                // 使用した単語を抽出
+                // 使用した単語を抽出（AIが【使用した単語帳の単語】セクションに明記した単語のみ）
                 $usedWords = [];
-                foreach ($words as $word) {
-                    if (stripos($generatedText, $word->word) !== false) {
-                        $usedWords[] = $word;
+
+                // 【使用した単語帳の単語】セクションを抽出
+                $usedWordsSection = '';
+                if (preg_match('/【使用した単語帳の単語】\s*\n(.+?)(\n\n|$)/s', $generatedText, $matches)) {
+                    $usedWordsSection = $matches[1];
+                } else if (preg_match('/使用した単語帳の単語[:\s]*\n(.+?)(\n\n|$)/s', $generatedText, $matches)) {
+                    $usedWordsSection = $matches[1];
+                }
+
+                // セクションから単語を検出
+                if (!empty($usedWordsSection)) {
+                    foreach ($words as $word) {
+                        // 単語境界を考慮した正確な一致（大文字小文字無視）
+                        if (preg_match('/\b' . preg_quote($word->word, '/') . '\b/i', $usedWordsSection)) {
+                            $usedWords[] = $word;
+                        }
                     }
                 }
 
