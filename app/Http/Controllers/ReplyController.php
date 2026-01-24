@@ -27,7 +27,7 @@ class ReplyController extends Controller
         })->implode(', ');
 
         // Gemini APIキーを取得
-        $apiKey = env('GEMINI_API_KEY');
+        $apiKey = config('services.gemini.api_key');
 
         if (!$apiKey) {
             return back()->with('error', 'Gemini API キーが設定されていません。.envファイルにGEMINI_API_KEYを追加してください。');
