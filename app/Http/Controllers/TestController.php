@@ -21,10 +21,18 @@ class TestController extends Controller
     {
         $count = $request->input('count', 10);
 
+        \Log::info('=== TEST START ===', ['requested_count' => $count]);
+
         // 問題を一括生成
         $questionQueue = $this->generateQuestionBatch($count);
 
+        \Log::info('Question generation result', [
+            'generated_count' => count($questionQueue),
+            'expected_count' => $count
+        ]);
+
         if (empty($questionQueue)) {
+            \Log::error('Failed to generate any questions');
             return redirect()->route('ShowTest')->with('error', '問題の生成に失敗しました');
         }
 
@@ -64,9 +72,14 @@ class TestController extends Controller
 
     private function generateQuestionBatch($count = 10)
     {
+        \Log::info('=== generateQuestionBatch START ===', ['count' => $count]);
+
         $words = Word::with('japanese')->get();
 
+        \Log::info('Words fetched', ['total_words' => $words->count()]);
+
         if ($words->count() < 1) {
+            \Log::error('No words found in database');
             return [];
         }
 
@@ -74,9 +87,13 @@ class TestController extends Controller
         $questionCount = min($count, $words->count());
         $selectedWords = $words->random($questionCount);
 
+        \Log::info('Words selected for questions', ['selected_count' => $selectedWords->count()]);
+
         // 1回のAPI呼び出しで全問題を生成
         $apiKey = config('services.gemini.api_key');
         $questions = [];
+
+        \Log::info('API Key check', ['has_key' => !empty($apiKey)]);
 
         if ($apiKey) {
             // プロンプト用に単語リストを作成
@@ -118,7 +135,9 @@ class TestController extends Controller
 （以下同様に全ての単語について）";
 
             try {
-                \Log::info('Calling Gemini API for batch test generation');
+                \Log::info('=== Calling Gemini API for batch test generation ===');
+                \Log::info('API URL', ['url' => "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent"]);
+                \Log::info('Prompt preview', ['prompt_length' => strlen($prompt), 'word_count' => $selectedWords->count()]);
 
                 $response = Http::timeout(30)->post(
                     "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key={$apiKey}",
@@ -133,11 +152,16 @@ class TestController extends Controller
                     ]
                 );
 
+                \Log::info('API Response Status', ['status' => $response->status()]);
+
                 if ($response->successful()) {
                     $result = $response->json();
                     $generatedText = $result['candidates'][0]['content']['parts'][0]['text'] ?? '';
 
-                    \Log::info('Generated batch test options', ['text' => $generatedText]);
+                    \Log::info('Generated batch test options', [
+                        'text_length' => strlen($generatedText),
+                        'first_200_chars' => substr($generatedText, 0, 200)
+                    ]);
 
                     // 各単語の選択肢を抽出
                     foreach ($selectedWords as $index => $word) {
@@ -147,12 +171,16 @@ class TestController extends Controller
                         // この単語の不正解選択肢を抽出
                         $pattern = "/{$wordNum}\.\s+.*?\n{$wordNum}-1\.\s*(.+?)\n{$wordNum}-2\.\s*(.+?)\n{$wordNum}-3\.\s*(.+?)(\n|$)/s";
 
+                        \Log::info("Attempting pattern match for word {$wordNum}", ['word' => $word->word]);
+
                         if (preg_match($pattern, $generatedText, $matches)) {
                             $wrongOptions = [
                                 trim($matches[1]),
                                 trim($matches[2]),
                                 trim($matches[3])
                             ];
+
+                            \Log::info("Successfully matched options for word {$wordNum}", ['options' => $wrongOptions]);
 
                             $options = collect([$correctMeaning])->merge($wrongOptions)->shuffle();
 
@@ -161,16 +189,29 @@ class TestController extends Controller
                                 'correct_meaning' => $correctMeaning,
                                 'options' => $options->toArray()
                             ];
+                        } else {
+                            \Log::warning("Failed to match pattern for word {$wordNum}", ['word' => $word->word]);
                         }
                     }
+
+                    \Log::info('API generation completed', ['questions_generated' => count($questions)]);
+                } else {
+                    \Log::error('API request failed', ['status' => $response->status(), 'body' => $response->body()]);
                 }
             } catch (\Exception $e) {
-                \Log::error('Gemini API batch generation error: ' . $e->getMessage());
+                \Log::error('Gemini API batch generation error: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
             }
+        } else {
+            \Log::warning('Skipping API call - no API key configured');
         }
 
         // API生成に失敗した場合は従来の方法で補完
         if (count($questions) < $questionCount && $words->count() >= 4) {
+            \Log::warning('Falling back to traditional method', [
+                'api_generated' => count($questions),
+                'needed' => $questionCount
+            ]);
+
             $remainingWords = $selectedWords->slice(count($questions));
 
             foreach ($remainingWords as $word) {
@@ -188,6 +229,8 @@ class TestController extends Controller
                 ];
             }
         }
+
+        \Log::info('=== generateQuestionBatch END ===', ['final_question_count' => count($questions)]);
 
         return $questions;
     }
