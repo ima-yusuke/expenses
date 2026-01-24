@@ -47,16 +47,16 @@
                     </div>
 
                     <!-- 生成された返信文 -->
-                    <div class="bg-gradient-to-br from-white to-accent-50/30 backdrop-blur-sm border-2 border-accent-200 rounded-2xl p-8 shadow-soft-lg">
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-xl font-bold text-primary-900 flex items-center">
-                                <svg class="w-6 h-6 mr-2 text-accent-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="bg-gradient-to-br from-white to-accent-50/30 backdrop-blur-sm border-2 border-accent-200 rounded-2xl p-6 sm:p-8 shadow-soft-lg">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                            <h3 class="text-lg sm:text-xl font-bold text-primary-900 flex items-center">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-accent-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                                 提案された返信文
                             </h3>
-                            <button onclick="copyEnglishOnly()" id="copyButton" class="bg-gradient-to-r from-primary-800 to-primary-900 hover:from-primary-900 hover:to-primary-800 text-white text-sm px-5 py-2.5 rounded-lg font-semibold shadow-soft hover:shadow-soft-lg transition-all duration-300 transform hover:-translate-y-0.5 flex items-center">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <button onclick="copyEnglishOnly()" id="copyButton" class="w-full sm:w-auto bg-gradient-to-r from-primary-800 to-primary-900 hover:from-primary-900 hover:to-primary-800 text-white text-sm px-5 py-2.5 rounded-lg font-semibold shadow-soft hover:shadow-soft-lg transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center whitespace-nowrap">
+                                <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                                 </svg>
                                 英文をコピー

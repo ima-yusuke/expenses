@@ -25,7 +25,7 @@
 
                     <div class="my-12 text-center">
                         <div class="inline-block">
-                            <p class="text-5xl font-bold text-primary-900 tracking-wide">{{$correctWord->word}}</p>
+                            <p class="text-3xl sm:text-4xl md:text-5xl font-bold text-primary-900 tracking-wide">{{$correctWord->word}}</p>
                             <div class="h-1 bg-gradient-to-r from-transparent via-accent-500 to-transparent mt-4 rounded-full"></div>
                         </div>
                     </div>

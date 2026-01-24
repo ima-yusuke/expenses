@@ -17,6 +17,7 @@ class ReplyController extends Controller
     {
         $friendMessage = $request->input('friend_message');
         $replyIntent = $request->input('reply_intent');
+        $relationship = $request->input('relationship');
 
         // 単語帳の全単語を取得
         $words = Word::with('japanese')->get();
@@ -33,10 +34,22 @@ class ReplyController extends Controller
             return back()->with('error', 'Gemini API キーが設定されていません。.envファイルにGEMINI_API_KEYを追加してください。');
         }
 
-        // Gemini APIにリクエスト
-        $prompt = "あなたは友達とのカジュアルな英語チャットをサポートするアシスタントです。
+        // 関係性に応じたトーンの説明
+        $toneGuide = [
+            'friend' => '友達同士のカジュアルでフレンドリーな表現',
+            'work' => '仕事関係者への丁寧でプロフェッショナルな表現',
+            'romantic' => '恋人への温かく親密な表現',
+            'family' => '家族への親しみやすく温かい表現'
+        ];
 
-友達からのメッセージ: \"{$friendMessage}\"
+        $selectedTone = $toneGuide[$relationship] ?? $toneGuide['friend'];
+
+        // Gemini APIにリクエスト
+        $prompt = "あなたは英語でのメッセージ作成をサポートするアシスタントです。
+
+相手との関係性: {$selectedTone}
+
+相手からのメッセージ: \"{$friendMessage}\"
 
 ユーザーの返信したい内容: \"{$replyIntent}\"
 
@@ -47,8 +60,8 @@ class ReplyController extends Controller
 {$wordList}
 
 重要な要件:
-1. 最優先: 自然でカジュアルな友達同士の会話表現
-2. 友達のメッセージに対する適切な返信
+1. 最優先: {$selectedTone}にふさわしい自然な会話表現
+2. 相手のメッセージに対する適切な返信
 3. ユーザーの返信意図を正確に反映
 4. 単語リストの単語は無理に使わず、自然に使える場合のみ1-2個程度使用
 5. 単語の持つ様々な意味やイディオム表現も考慮して使用

@@ -50,6 +50,58 @@
                                 rows="5"></textarea>
                         </div>
 
+                        <div class="space-y-3">
+                            <label class="block text-sm font-semibold text-primary-900">
+                                相手との関係性 <span class="text-red-600">*</span>
+                            </label>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                <label class="relative flex items-center justify-center cursor-pointer">
+                                    <input type="radio" name="relationship" value="friend" required class="peer sr-only">
+                                    <div class="w-full bg-white border-2 border-primary-200 peer-checked:border-accent-500 peer-checked:bg-accent-50 rounded-xl px-4 py-3 transition-all duration-200 peer-checked:shadow-soft">
+                                        <div class="flex flex-col items-center">
+                                            <svg class="w-6 h-6 mb-1 text-primary-600 peer-checked:text-accent-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                            </svg>
+                                            <span class="text-sm font-semibold text-primary-900">友人</span>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="relative flex items-center justify-center cursor-pointer">
+                                    <input type="radio" name="relationship" value="work" required class="peer sr-only">
+                                    <div class="w-full bg-white border-2 border-primary-200 peer-checked:border-accent-500 peer-checked:bg-accent-50 rounded-xl px-4 py-3 transition-all duration-200 peer-checked:shadow-soft">
+                                        <div class="flex flex-col items-center">
+                                            <svg class="w-6 h-6 mb-1 text-primary-600 peer-checked:text-accent-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                            </svg>
+                                            <span class="text-sm font-semibold text-primary-900">仕事</span>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="relative flex items-center justify-center cursor-pointer">
+                                    <input type="radio" name="relationship" value="romantic" required class="peer sr-only">
+                                    <div class="w-full bg-white border-2 border-primary-200 peer-checked:border-accent-500 peer-checked:bg-accent-50 rounded-xl px-4 py-3 transition-all duration-200 peer-checked:shadow-soft">
+                                        <div class="flex flex-col items-center">
+                                            <svg class="w-6 h-6 mb-1 text-primary-600 peer-checked:text-accent-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                            </svg>
+                                            <span class="text-sm font-semibold text-primary-900">恋人</span>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="relative flex items-center justify-center cursor-pointer">
+                                    <input type="radio" name="relationship" value="family" required class="peer sr-only">
+                                    <div class="w-full bg-white border-2 border-primary-200 peer-checked:border-accent-500 peer-checked:bg-accent-50 rounded-xl px-4 py-3 transition-all duration-200 peer-checked:shadow-soft">
+                                        <div class="flex flex-col items-center">
+                                            <svg class="w-6 h-6 mb-1 text-primary-600 peer-checked:text-accent-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                            </svg>
+                                            <span class="text-sm font-semibold text-primary-900">家族</span>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
                         <div class="space-y-2">
                             <label for="reply_intent" class="block text-sm font-semibold text-primary-900">
                                 返信したい内容（日本語でOK）
