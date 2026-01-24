@@ -95,9 +95,15 @@
                     </div>
 
                     <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <a href="{{route('ShowTest')}}" class="bg-gradient-to-r from-primary-800 to-primary-900 hover:from-primary-900 hover:to-primary-800 text-white px-8 py-4 rounded-xl font-semibold shadow-soft hover:shadow-soft-lg transition-all duration-300 transform hover:-translate-y-0.5">
-                            次の問題へ
-                        </a>
+                        @if(isset($hasMoreQuestions) && $hasMoreQuestions)
+                            <a href="{{route('ShowQuestion')}}" class="bg-gradient-to-r from-primary-800 to-primary-900 hover:from-primary-900 hover:to-primary-800 text-white px-8 py-4 rounded-xl font-semibold shadow-soft hover:shadow-soft-lg transition-all duration-300 transform hover:-translate-y-0.5">
+                                次の問題へ
+                            </a>
+                        @else
+                            <a href="{{route('ShowTest')}}" class="bg-gradient-to-r from-primary-800 to-primary-900 hover:from-primary-900 hover:to-primary-800 text-white px-8 py-4 rounded-xl font-semibold shadow-soft hover:shadow-soft-lg transition-all duration-300 transform hover:-translate-y-0.5">
+                                新しいテストを開始
+                            </a>
+                        @endif
                         <a href="{{route('ShowIndex')}}" class="bg-white hover:bg-primary-50 border-2 border-primary-200 text-primary-900 px-8 py-4 rounded-xl font-semibold shadow-soft hover:shadow-soft-lg transition-all duration-300">
                             単語帳に戻る
                         </a>

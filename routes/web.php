@@ -14,7 +14,9 @@ Route::post('/update/{id}', [MainController::class, 'CheckProduct'])->name('Chec
 Route::post('/', [MainController::class, 'AddWord'])->name('AddWord');
 Route::delete('/', [MainController::class, 'DeleteWord'])->name('DeleteWord');
 
-Route::get('/test', [TestController::class, 'ShowTest'])->name('ShowTest');
+Route::get('/test', [TestController::class, 'ShowTestStart'])->name('ShowTest');
+Route::get('/test/start', [TestController::class, 'StartTest'])->name('StartTest');
+Route::get('/test/question', [TestController::class, 'ShowQuestion'])->name('ShowQuestion');
 Route::post('/test/check', [TestController::class, 'CheckAnswer'])->name('CheckAnswer');
 
 Route::get('/reply-assistant', [ReplyController::class, 'ShowReplyAssistant'])->name('ShowReplyAssistant');

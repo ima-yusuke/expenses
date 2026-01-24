@@ -8,20 +8,41 @@ use App\Models\Word;
 
 class TestController extends Controller
 {
-    public function ShowTest()
+    public function ShowTestStart()
     {
-        // セッションから問題リストを取得、なければ生成
+        // セッションをクリア
+        session()->forget('test_questions');
+        session()->forget('test_total_count');
+
+        return view('test-start');
+    }
+
+    public function StartTest(Request $request)
+    {
+        $count = $request->input('count', 10);
+
+        // 問題を一括生成
+        $questionQueue = $this->generateQuestionBatch($count);
+
+        if (empty($questionQueue)) {
+            return redirect()->route('ShowTest')->with('error', '問題の生成に失敗しました');
+        }
+
+        session([
+            'test_questions' => $questionQueue,
+            'test_total_count' => $count
+        ]);
+
+        return redirect()->route('ShowQuestion');
+    }
+
+    public function ShowQuestion()
+    {
+        // セッションから問題リストを取得
         $questionQueue = session('test_questions', []);
 
         if (empty($questionQueue)) {
-            // 10問分の問題を一括生成
-            $questionQueue = $this->generateQuestionBatch();
-
-            if (empty($questionQueue)) {
-                return redirect()->route('ShowIndex')->with('error', '問題の生成に失敗しました');
-            }
-
-            session(['test_questions' => $questionQueue]);
+            return redirect()->route('ShowTest');
         }
 
         // 最初の問題を取り出す
@@ -35,11 +56,13 @@ class TestController extends Controller
         $correctMeaning = $currentQuestion['correct_meaning'];
         $options = collect($currentQuestion['options']);
         $remainingQuestions = count($questionQueue);
+        $totalCount = session('test_total_count', 10);
+        $currentQuestionNumber = $totalCount - $remainingQuestions;
 
-        return view('test', compact('correctWord', 'correctMeaning', 'options', 'remainingQuestions'));
+        return view('test', compact('correctWord', 'correctMeaning', 'options', 'remainingQuestions', 'currentQuestionNumber', 'totalCount'));
     }
 
-    private function generateQuestionBatch()
+    private function generateQuestionBatch($count = 10)
     {
         $words = Word::with('japanese')->get();
 
@@ -47,8 +70,8 @@ class TestController extends Controller
             return [];
         }
 
-        // 最大10問（または単語数が少ない場合はその数）
-        $questionCount = min(10, $words->count());
+        // 最大指定問題数（または単語数が少ない場合はその数）
+        $questionCount = min($count, $words->count());
         $selectedWords = $words->random($questionCount);
 
         // 1回のAPI呼び出しで全問題を生成
@@ -252,6 +275,9 @@ class TestController extends Controller
 
         $word = Word::with('japanese')->findOrFail($wordId);
 
-        return view('test-result', compact('isCorrect', 'selectedAnswer', 'correctAnswer', 'word'));
+        $remainingQuestions = count(session('test_questions', []));
+        $hasMoreQuestions = $remainingQuestions > 0;
+
+        return view('test-result', compact('isCorrect', 'selectedAnswer', 'correctAnswer', 'word', 'hasMoreQuestions'));
     }
 }
