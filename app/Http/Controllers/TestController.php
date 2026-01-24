@@ -70,7 +70,7 @@ class TestController extends Controller
             \Log::info('Calling Gemini API for test generation', ['word' => $englishWord]);
 
             $response = Http::timeout(15)->post(
-                "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={$apiKey}",
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key={$apiKey}",
                 [
                     'contents' => [
                         [
