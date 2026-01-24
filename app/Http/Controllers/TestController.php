@@ -10,35 +10,163 @@ class TestController extends Controller
 {
     public function ShowTest()
     {
+        // セッションから問題リストを取得、なければ生成
+        $questionQueue = session('test_questions', []);
+
+        if (empty($questionQueue)) {
+            // 10問分の問題を一括生成
+            $questionQueue = $this->generateQuestionBatch();
+
+            if (empty($questionQueue)) {
+                return redirect()->route('ShowIndex')->with('error', '問題の生成に失敗しました');
+            }
+
+            session(['test_questions' => $questionQueue]);
+        }
+
+        // 最初の問題を取り出す
+        $currentQuestion = array_shift($questionQueue);
+
+        // 残りの問題をセッションに保存
+        session(['test_questions' => $questionQueue]);
+
+        // ビューに渡すデータを準備
+        $correctWord = $currentQuestion['word'];
+        $correctMeaning = $currentQuestion['correct_meaning'];
+        $options = collect($currentQuestion['options']);
+        $remainingQuestions = count($questionQueue);
+
+        return view('test', compact('correctWord', 'correctMeaning', 'options', 'remainingQuestions'));
+    }
+
+    private function generateQuestionBatch()
+    {
         $words = Word::with('japanese')->get();
 
         if ($words->count() < 1) {
-            return redirect()->route('ShowIndex')->with('error', '単語が1つ以上必要です');
+            return [];
         }
 
-        // ランダムに1つの単語を選択
-        $correctWord = $words->random();
+        // 最大10問（または単語数が少ない場合はその数）
+        $questionCount = min(10, $words->count());
+        $selectedWords = $words->random($questionCount);
 
-        // 正解の意味を取得（複数ある場合は最初の1つ）
-        $correctMeaning = $correctWord->japanese->first()->japanese;
+        // 1回のAPI呼び出しで全問題を生成
+        $apiKey = config('services.gemini.api_key');
+        $questions = [];
 
-        // Gemini APIで似た意味の選択肢を生成
-        $options = $this->generateSimilarOptions($correctWord->word, $correctMeaning);
-
-        // APIエラーの場合は従来の方法にフォールバック
-        if (empty($options)) {
-            if ($words->count() < 4) {
-                return redirect()->route('ShowIndex')->with('error', '単語が4つ以上必要です');
+        if ($apiKey) {
+            // プロンプト用に単語リストを作成
+            $wordList = [];
+            foreach ($selectedWords as $word) {
+                $wordList[] = [
+                    'english' => $word->word,
+                    'japanese' => $word->japanese->first()->japanese
+                ];
             }
 
-            $wrongWords = $words->where('id', '!=', $correctWord->id)->random(3);
-            $wrongMeanings = $wrongWords->map(function($word) {
-                return $word->japanese->first()->japanese;
-            });
-            $options = collect([$correctMeaning])->merge($wrongMeanings)->shuffle();
+            $wordListText = '';
+            foreach ($wordList as $index => $item) {
+                $wordListText .= ($index + 1) . ". {$item['english']} - {$item['japanese']}\n";
+            }
+
+            $prompt = "以下の英単語リストについて、それぞれ4択クイズの紛らわしい不正解選択肢を3つずつ作成してください。
+
+【単語リスト】
+{$wordListText}
+
+要件:
+- 各単語の正解の意味に似ているが微妙に違う日本語の意味を3つ
+- 英語学習者が間違えやすい、似た意味を選ぶこと
+- 各選択肢は15文字以内の簡潔な日本語で
+
+以下の形式で出力してください:
+
+1. {$wordList[0]['english']}
+1-1. (不正解1)
+1-2. (不正解2)
+1-3. (不正解3)
+
+2. {$wordList[1]['english']}
+2-1. (不正解1)
+2-2. (不正解2)
+2-3. (不正解3)
+
+（以下同様に全ての単語について）";
+
+            try {
+                \Log::info('Calling Gemini API for batch test generation');
+
+                $response = Http::timeout(30)->post(
+                    "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key={$apiKey}",
+                    [
+                        'contents' => [
+                            [
+                                'parts' => [
+                                    ['text' => $prompt]
+                                ]
+                            ]
+                        ]
+                    ]
+                );
+
+                if ($response->successful()) {
+                    $result = $response->json();
+                    $generatedText = $result['candidates'][0]['content']['parts'][0]['text'] ?? '';
+
+                    \Log::info('Generated batch test options', ['text' => $generatedText]);
+
+                    // 各単語の選択肢を抽出
+                    foreach ($selectedWords as $index => $word) {
+                        $correctMeaning = $word->japanese->first()->japanese;
+                        $wordNum = $index + 1;
+
+                        // この単語の不正解選択肢を抽出
+                        $pattern = "/{$wordNum}\.\s+.*?\n{$wordNum}-1\.\s*(.+?)\n{$wordNum}-2\.\s*(.+?)\n{$wordNum}-3\.\s*(.+?)(\n|$)/s";
+
+                        if (preg_match($pattern, $generatedText, $matches)) {
+                            $wrongOptions = [
+                                trim($matches[1]),
+                                trim($matches[2]),
+                                trim($matches[3])
+                            ];
+
+                            $options = collect([$correctMeaning])->merge($wrongOptions)->shuffle();
+
+                            $questions[] = [
+                                'word' => $word,
+                                'correct_meaning' => $correctMeaning,
+                                'options' => $options->toArray()
+                            ];
+                        }
+                    }
+                }
+            } catch (\Exception $e) {
+                \Log::error('Gemini API batch generation error: ' . $e->getMessage());
+            }
         }
 
-        return view('test', compact('correctWord', 'correctMeaning', 'options'));
+        // API生成に失敗した場合は従来の方法で補完
+        if (count($questions) < $questionCount && $words->count() >= 4) {
+            $remainingWords = $selectedWords->slice(count($questions));
+
+            foreach ($remainingWords as $word) {
+                $correctMeaning = $word->japanese->first()->japanese;
+                $wrongWords = $words->where('id', '!=', $word->id)->random(min(3, $words->count() - 1));
+                $wrongMeanings = $wrongWords->map(function($w) {
+                    return $w->japanese->first()->japanese;
+                });
+                $options = collect([$correctMeaning])->merge($wrongMeanings)->shuffle();
+
+                $questions[] = [
+                    'word' => $word,
+                    'correct_meaning' => $correctMeaning,
+                    'options' => $options->toArray()
+                ];
+            }
+        }
+
+        return $questions;
     }
 
     private function generateSimilarOptions($englishWord, $correctMeaning)

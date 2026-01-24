@@ -13,10 +13,20 @@
 
                 <div class="bg-white/80 backdrop-blur-sm border border-primary-100 rounded-2xl p-10 shadow-soft-lg">
                     <div class="text-center mb-8">
-                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-accent-400 to-accent-600 mb-6">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex-1"></div>
+                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-accent-400 to-accent-600">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1 text-right">
+                                @if(isset($remainingQuestions))
+                                    <span class="inline-block px-3 py-1 bg-primary-100 text-primary-800 text-sm font-semibold rounded-full">
+                                        残り {{ $remainingQuestions }} 問
+                                    </span>
+                                @endif
+                            </div>
                         </div>
                         <h2 class="text-xl font-semibold text-primary-700 mb-4">
                             この単語の意味は？
